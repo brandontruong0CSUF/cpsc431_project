@@ -3,9 +3,6 @@
   
   // Start session
   session_start();
-  if ($_SESSION["accountType"] == 1) {
-    header("Location: http://www.yoursite.com/new_page.html");
-  }
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/custom.css"></script>
+    <link rel="stylesheet" href="styles/signin.css"></script>
     <title>Registration - Course Management System</title>
   </head>
 
@@ -25,9 +22,9 @@
 
     <div class="container">
 
-      <form>
+      <form class="form-signin">
 
-        <h2>Register</h2>
+        <h2 class="form-signin-heading">Register</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>

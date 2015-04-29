@@ -1,10 +1,3 @@
-<?php
-  include_once "includes/db_config.php";
-  
-  // Start session
-  session_start();
-?>
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -22,17 +15,20 @@
 
     <div class="container">
 
-      <form class="form-signin">
+      <form class="form-signin" action="login.php" method="POST">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <input type="email" name="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" name="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-
       </form>
-
+    <!--
+      <form class="form-signin" method="POST" action="register.php">
+        <h3> Or register as a student </h3>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+      </form>
+    -->
     </div>
 
     <!-- Load these after page is finished downloading -->
