@@ -1,0 +1,122 @@
+// faculty functions: completed with the faculy id already obtained.
+// 1. List all the course sessions being taught by the faculty.
+$coursesessionid = SELECT CSNUM FROM FACULTY WHERE FID = '$facultyid';  //output: array 
+$csresult = SELECT COURSE_NUM FROM COURSE_SESSION WHERE CSNUM = '$coursesessionid';  //output: array, additional output for details of the course session 
+
+// 2. Review the detail of a particular course. 
+$coursesessionid = SELECT CSNUM FROM FACULTY WHERE FID = '$facultyid';  //output: array 
+$csresult = SELECT COURSE_NUM FROM COURSE_SESSION WHERE CSNUM = '$coursesessionid';  //output: array
+$cdetails = SELECT DETAILS FROM COURSE WHERE CNUM = '$csresult';
+
+// 3. Upload the course material (/syllabus) for a course session.
+$coursesessionid = SELECT CSNUM FROM FACULTY WHERE FID = '$facultyid';  //output: array 
+$csresult = SELECT COURSE_NUM FROM COURSE_SESSION WHERE CSNUM = '$coursesessionid';  //output: array
+INSERT INTO UPLOAD(NAME, SIZE, TYPE, CONTENT) VALUES('$fileName', '$fileSize', '$fileType', '$content');
+$uploadint = SELECT ID FROM UPLOAD WHERE NAME = '$fileName' AND SIZE = '$fileSize';
+$course_material_id = SELECT COURSE_MATERIAL_ID FROM TEACH WHERE FID = '$facultyid' AND COURSE_NUM = '$csresult';
+INSERT INTO COURSE_MATERIAL(DOCUMENT_UP) VALUES('$uploadint') WHERE CMID = '$course_material_id';
+
+// 4. Download students’ homework/term project for a course session. 
+$coursesessionid = SELECT CSNUM FROM FACULTY WHERE FID = '$facultyid';  //output: array 
+$deliver_id = SELECT DELIVER_ID FROM ENROLL WHERE COURSE_SECTION_NUM = '$coursesessionid';
+$homework = SELECT HOMEWORK FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$termproj = SELECT TERM_PROJECT FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$HWdocUP = SELECT DOCUMENT_UP FROM HOMEWORK WHERE HOMEWORK = $homework;
+$TPdocUP = SELECT PROJECT_UP FROM TERM_PROJECT WHERE TERM_PROJECT_ID = $termproj;
+$hwresult = SELECT NAME, TYPE, SIZE, CONTENT FROM UPLOAD WHERE ID = $HWdocUP;
+$tpresult = SELECT NAME, TYPE, SIZE, CONTENT FROM UPLOAD WHERE ID = $TPdocUP;
+list($name, $type, $size, $content) = mysql_fetch_array($hwresult);
+list($name, $type, $size, $content) = mysql_fetch_array($tpresult);
+
+// 5. Enter students’ scores for each student. 
+$coursesessionid = SELECT CSNUM FROM FACULTY WHERE FID = '$facultyid';  //output: array 
+$deliver_id = SELECT  DELIVER_ID FROM ENROLL WHERE COURSE_SECTION_NUM = '$coursesessionid'; //output: array
+$midterm = SELECT MIDTERM FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$final = SELECT FINAL_EXAM FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$homework = SELECT HOMEWORK FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$termproj = SELECT TERM_PROJECT FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+INSERT INTO MIDTERM(SCORE) VALUES($inputvalue) WHERE MIDTERM_ID = $midterm;
+INSERT INTO FINAL_EXAM(SCORE) VALUES($inputvalue) WHERE FINAL_EXAM_ID = $final;
+INSERT INTO TERM_PROJECT(SCORE) VALUES($inputvalue) WHERE TERM_PROJECT_ID = $termproj;
+INSERT INTO HOMEWORK(SCORE) VALUES($inputvalue) WHERE HOMEWORK = $homework;
+
+
+// student functions: completed with the student id already obtained.
+// 1. List all the course sessions being offered. 
+$coursesessionid = SELECT * FROM COURSE_SESSION;  //output: array 
+
+// 2. Review the details of a course session. 
+$coursesessionid = SELECT * FROM COURSE_SESSION;  //output: array 
+SELECT DETAILS FROM COURSE_SESSION WHERE CSNUM = '$coursesessionid';
+
+// 3. Enroll to a particular session. 
+INSERT INTO ENROLL(SID, COURSE_SECTION_NUM, DELIVER_ID) VALUES('$studentid','$courseSecID','$deliverid');
+INSERT INTO DELIVERABLE(DELIVER_ID) VALUES('$deliverid');
+
+// 4. Upload the homework/term project for a course session. 
+INSERT INTO UPLOAD(NAME, SIZE, TYPE, CONTENT) VALUES('$fileName', '$fileSize', '$fileType', '$content');
+$uploadint = SELECT ID FROM UPLOAD WHERE NAME = '$fileName' AND SIZE = '$fileSize';
+INSERT INTO HOMEWORK(DOCUMENT_UP, HOMEWORK) VALUES('$uploadint', '$newHWid');
+$deliverid = SELECT DELIVER_ID FROM ENROLL WHERE SID = '$studentid' AND COURSE_SECTION_NUM = '$csnum';
+INSERT INTO DELIVERABLE(HOMEWORK) VALUES('$uploadint') WHERE DELIVER_ID = '$deliverid';
+
+// 5. Review the course material for a course session. 
+$coursesessionid = SELECT * FROM COURSE_SESSION;  //output: array 
+$facultyid = SELECT FID FROM FACULTY WHERE COURSE_SESSION_ID = '$coursesessionid';
+$courseid = SELECT COURSE_NUM FROM COURSE_SESSION WHERE COURSE_SESSION_ID = '$coursesessionid';
+$coursematerialid = SELECT COURSE_MATERIAL_ID FROM TEACH WHERE FID = '$facultyid' AND COURSE_NUM = '$courseid';
+$docUp = SELECT DOCUMENT_UP FROM COURSE_MATERIAL WHERE CMID = '$coursematerialid';
+$CMresult = SELECT NAME, TYPE, SIZE, CONTENT FROM UPLOAD WHERE ID = $docUP;
+list($name, $type, $size, $content) = mysql_fetch_array($CMresult);
+
+// 6. Review student’s grades. 
+$deliverid = SELECT DELIVER_ID FROM ENROLL WHERE SID = '$studentid' AND COURSE_SECTION_NUM = '$csnum';
+$midterm = SELECT MIDTERM FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$final = SELECT FINAL_EXAM FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$homework = SELECT HOMEWORK FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$termproj = SELECT TERM_PROJECT FROM DELIVERABLE WHERE DELIVER_ID = $deliver_id;
+$mscore = SELECT SCORE FROM MIDTERM WHERE MIDTERM_ID = '$midterm';
+$fscore = SELECT SCORE FROM FINAL_EXAM WHERE FINAL_EXAM_ID = '$final';
+$hscore = SELECT SCORE FROM HOMEWORK WHERE HOMEWORK = '$homework';
+$tscore = SELECT SCORE FROM TERM_PROJECT WHERE TERM_PROJECT_ID = '$termproj';
+
+
+// admin functions: completed with the admin id already obtained.
+// 1. Review the course schedule. 
+$departid = SELECT DEPARTMENT_NUM FROM CSUF_MEMBER WHERE ADMIN_ID = 1;
+$coursescheduleid = SELECT COURSE_SCHEDULE_ID FROM DEPARTMENT WHERE DNUM = '$departid';
+$cresult = SELECT COURSE_NUM FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid';
+
+// 2. Make changes to the course schedule: add a course to the course schedule, delete a course from the course schedule.
+$departid = SELECT DEPARTMENT_NUM FROM CSUF_MEMBER WHERE ADMIN_ID = 1;
+$coursescheduleid = SELECT COURSE_SCHEDULE_ID FROM DEPARTMENT WHERE DNUM = '$departid';
+$cresult = SELECT COURSE_NUM FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid';  //delete
+DELETE FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid' AND COURSE_NUM = '$cresult';  //delete
+DELETE FROM COURSE WHERE CNUM = '$cresult';  //delete
+INSERT INTO COURSE_SCHEDULE(COURSE_SCHEDULE_ID, COURSE_NUM) VALUES($coursescheduleid, $courseid);  //add
+INSERT INTO COURSE(CNUM, DETAILS) VALUES($courseid, $details);  //add
+
+// 3. Review/modify the details of a given course.  
+$departid = SELECT DEPARTMENT_NUM FROM CSUF_MEMBER WHERE ADMIN_ID = '$adminid';
+$coursescheduleid = SELECT COURSE_SCHEDULE_ID FROM DEPARTMENT WHERE DNUM = '$departid';
+$cresult = SELECT COURSE_NUM FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid';
+$cdetails = SELECT DETAILS FROM COURSE WHERE CNUM = '$cresult';  //view 
+INSERT INTO COURSE(DETAILS) VALUES('$newdetails') WHERE CNUM = '$cresult';  //modify 
+
+// 4. List all course sessions. 
+$departid = SELECT DEPARTMENT_NUM FROM CSUF_MEMBER WHERE ADMIN_ID = '$adminid';
+$coursescheduleid = SELECT COURSE_SCHEDULE_ID FROM DEPARTMENT WHERE DNUM = '$departid';
+$cresult = SELECT COURSE_NUM FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid'; 
+$csresults = SELECT CSNUM FROM COURSE_SESSION WHERE COURSE_NUM = '$cresult';  //array
+
+// 5. Add/delete a course session to/from a course. 
+$departid = SELECT DEPARTMENT_NUM FROM CSUF_MEMBER WHERE ADMIN_ID = '$adminid';
+$coursescheduleid = SELECT COURSE_SCHEDULE_ID FROM DEPARTMENT WHERE DNUM = '$departid';
+$cresult = SELECT COURSE_NUM FROM COURSE_SCHEDULE WHERE COURSE_SCHEDULE_ID = '$coursescheduleid'; 
+$csresults = SELECT CSNUM FROM COURSE_SESSION WHERE COURSE_NUM = '$cresult';  //output: array, delete
+DELETE FROM COURSE_SESSION WHERE CSNUM = '$csresults';  //delete
+DELETE FROM FACULTY WHERE COURSE_SESSION_ID = '$csresults';  //delete
+DELETE FROM STUDENT WHERE COURSE_SESSION_ID = '$csresults';  //delete
+DELETE FROM ENROLL WHERE COURSE_SECTION_NUM = '$csresults';  //delete
+INSERT INTO COURSE_SESSION(CSNUM, COURSE_NUM) VALUES($newcsid, $cresult);  //add
+

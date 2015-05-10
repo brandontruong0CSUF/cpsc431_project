@@ -1,19 +1,34 @@
 var myAppControllers = angular.module("myAppControllers", []);
 
-myAppControllers.controller("LoginCtrl", ["$scope", "$location",
+myAppControllers.controller("LoginCtrl", ["$scope", "$location", "$http",
 	function($scope, $location, $http, Page) {
 		$scope.Page = Page;
 		$scope.login = function() {
+			$mydata = {
+				"inputEmail": $scope.inputEmail,
+				"inputPassword": $scope.inputPassword
+			};
+			$http.post("php/login.php", $mydata)
+				.success(function(data, status, headers, config)
+        {
+            console.log(status + ' - ' + data);
+        })
+				.error(function(data, status, headers, config)
+        {
+            console.log('error');
+        });
+			/*
 			$http({
 				method: "POST",
-				url: "php\login.php",
+				url: "php/login.php",
 				data: {
 					inputEmail: $scope.inputEmail,
 					inputPassword: $scope.inputPassword
 				},
-				headers: { "Content-Type": "application/x-www-form-urlencoded" }
+				headers: { "Content-Type": "application/x-www-form-urlencoded;charset=utf-8" }
 			})
 			.success(function (data) {
+				console.log(data);
 				var type = data.type;
 				if (type === 0) {
 					$location.path("faculty.html");
@@ -28,9 +43,10 @@ myAppControllers.controller("LoginCtrl", ["$scope", "$location",
 					$scope.loginMessage = "There was a database error. Please contact an admin.";	
 				}
 			})
-			.fail(function (data) {
+			.error(function (data) {
 				$scope.loginMessage = data.error;
 			});
+			*/
 		};
 	}
 ]);

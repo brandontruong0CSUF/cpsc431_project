@@ -9,5 +9,5 @@
     if ($db->connect_error) {
         die("Could not connect to MySQL server\n" . $db->connect_error);
     }
-    
+
 ?>
