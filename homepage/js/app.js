@@ -11,21 +11,33 @@ myApp.factory("Page", function () {
 
 // Routes
 myApp.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
-  var viewDir = "partials/"
+  var viewDir = "partials/";
   $routeProvider
     .when("/", {
       templateUrl: viewDir + "login.html",
-      controller: "LoginCtrl"
+      controller: "LoginCtrl",
+      title: "Login"
     })
 		.when("/faculty", {
       templateUrl: viewDir + "faculty.html",
-      controller: "FacultyCtrl"
+      controller: "FacultyCtrl",
+      title: "Faculty"
     })
 		.when("/students", {
       templateUrl: viewDir + "students.html",
       controller: "StudentsCtrl"
+    })
+    .otherwise({
+      redirectTo: "/"
     });
 	
 	$locationProvider.html5Mode({enabled: true, requireBase: true});
 	
+}]);
+
+myApp.run(["$location", "$rootScope", function($location, $rootScope) {
+  $rootScope.$on("$routeChangeSuccess",
+    function (event, current, previous) {
+      $rootScope.title = current.$$route.title;
+    });
 }]);

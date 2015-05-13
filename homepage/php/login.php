@@ -4,12 +4,11 @@
 session_start();
 
 // Connect to database
-include("includes/db_connect.php");
-include("Zend/Json.php");
+include("../includes/db_connect.php");
 
 // Parse POST data from AngularJS call
 $postData = file_get_contents("php://input");
-$request = Zend_Json::decode($postData);
+$request = json_decode($postData);
 $email = $request->inputEmail;
 $pw = $request->inputPassword;
 
@@ -28,7 +27,6 @@ if ( $num_rows > 0) {
   
   // Set account type
   $row = $result->fetch_assoc();
-  $_SESSION['type'] = $row['TYPE'];
 	if ($row['FACULTY_ID'] != NULL) {
 		$_SESSION['type'] = 0;
 		$_SESSION['id'] = $row['FACULTY_ID'];
@@ -44,14 +42,14 @@ if ( $num_rows > 0) {
 	else {
 		die("Login Account ERROR!");	
 	}
-  
+	
 	$data = array(
 		"success" => true,
 		"type" => $_SESSION['type'],
 		"id" => $_SESSION['id']
 	);
 	
-	echo Zend_Json::encode($data);
+	echo json_encode($data);
 }
 else {
 	
@@ -61,7 +59,7 @@ else {
 		"error" => "Failed to log in, please try again!"
 	);
 	
-  echo Zend_Json::encode($data);
+  echo json_decode($data);
 }
 
 ?>

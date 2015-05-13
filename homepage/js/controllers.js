@@ -1,22 +1,33 @@
 var myAppControllers = angular.module("myAppControllers", []);
 
+myAppControllers.controller("IndexCtrl", ["$scope",
+	function($scope, Page) {
+	}
+}]);
+
 myAppControllers.controller("LoginCtrl", ["$scope", "$location", "$http",
 	function($scope, $location, $http, Page) {
-		$scope.Page = Page;
+		Page.setTitle("Login Course Management");
+		//$scope.Page = Page;
 		$scope.login = function() {
-			$mydata = {
+			var viewDir = "partials/";
+			var $mydata = {
 				"inputEmail": $scope.inputEmail,
 				"inputPassword": $scope.inputPassword
 			};
 			$http.post("php/login.php", $mydata)
 				.success(function(data, status, headers, config)
-        {
-            console.log(status + ' - ' + data);
-        })
+        		{
+            		console.log(status + ' - ' + data);
+            		if (data.type === 0) {
+            			$location.path('/faculty');
+            		}
+        		})
 				.error(function(data, status, headers, config)
-        {
-            console.log('error');
-        });
+        		{
+            		console.log('error');
+            		$scope.loginMessage = "There was a database error. Please contact an admin.";
+        		});
 			/*
 			$http({
 				method: "POST",
@@ -51,15 +62,15 @@ myAppControllers.controller("LoginCtrl", ["$scope", "$location", "$http",
 	}
 ]);
 
-myAppControllers.controller("FacultyCtrl", ["$scope", "$location",
+myAppControllers.controller("FacultyCtrl", ["$scope", "$location", "$http",
 	function($scope, $location, $http, Page) {
-		Page.setTitle = "Faculty Course Management";
+		Page.setTitle("Faculty Course Management");
 		
 	}
 ]);
 
-myAppControllers.controller("StudentsCtrl", ["$scope", "$location",
+myAppControllers.controller("StudentsCtrl", ["$scope", "$location", "$http",
 	function($scope, $location, $http, Page) {
-		Page.setTitle = "Student Course Management";
+		Page.setTitle("Student Course Management");
 	}
 ]);
