@@ -10,7 +10,7 @@ myApp.factory("Page", function () {
 });
 
 // Routes
-myApp.config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
+myApp.config(["$routeProvider", function($routeProvider) {
   var viewDir = "partials/";
   $routeProvider
     .when("/", {
@@ -23,15 +23,16 @@ myApp.config(["$routeProvider", "$locationProvider", function($routeProvider, $l
       controller: "FacultyCtrl",
       title: "Faculty"
     })
-		.when("/students", {
+    .when("/students", {
       templateUrl: viewDir + "students.html",
-      controller: "StudentsCtrl"
+      controller: "StudentsCtrl",
+      title: "Student"
     })
-    .otherwise({
-      redirectTo: "/"
+    .when("/admin", {
+      templateUrl: viewDir + "admin.html",
+      controller: "AdminCtrl",
+      title: "Admin"
     });
-	
-	$locationProvider.html5Mode({enabled: true, requireBase: true});
 	
 }]);
 

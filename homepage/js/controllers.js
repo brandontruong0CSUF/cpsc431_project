@@ -1,14 +1,7 @@
 var myAppControllers = angular.module("myAppControllers", []);
 
-myAppControllers.controller("IndexCtrl", ["$scope",
-	function($scope, Page) {
-	}
-}]);
-
 myAppControllers.controller("LoginCtrl", ["$scope", "$location", "$http",
-	function($scope, $location, $http, Page) {
-		Page.setTitle("Login Course Management");
-		//$scope.Page = Page;
+	function($scope, $location, $http) {
 		$scope.login = function() {
 			var viewDir = "partials/";
 			var $mydata = {
@@ -21,6 +14,16 @@ myAppControllers.controller("LoginCtrl", ["$scope", "$location", "$http",
             		console.log(status + ' - ' + data);
             		if (data.type === 0) {
             			$location.path('/faculty');
+            		}
+            		else if (data.type === 1) {
+            			$location.path('/students');
+            		}
+            		else if (data.type === 2) {
+            			$location.path('/admin')
+            		}
+            		else {
+            			console.log('type error');
+            			$scope.loginMessage = "There was a database error. Please contact an admin.";
             		}
         		})
 				.error(function(data, status, headers, config)
