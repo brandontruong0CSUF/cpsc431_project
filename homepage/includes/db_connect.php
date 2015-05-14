@@ -1,17 +1,16 @@
 <?php
 
-    /*
-    define("HOST", "ecsmysql");         // The host you want to connect to.
-    define("USER", "cs431s3");          // The database username.
-    define("PASSWORD", "eesheico");     // The database password.
+    define("HOST", "localhost");         // The host you want to connect to.
+    define("USER", "root");          // The database username.
+    define("PASSWORD", "rioter");     // The database password.
     define("DATABASE", "cs431s3");      // The database name.
 
     $db = new mysqli(HOST, USER, PASSWORD, DATABASE);
     if ($db->connect_error) {
         die("Could not connect to MySQL server\n" . $db->connect_error);
     }
-    */
     
+    /*
     // This is the database connection information for cloud9 ide
     $servername = getenv('IP');
     $username = "brandontruong0cs";
@@ -27,5 +26,5 @@
         die("Connection failed: " . $db->connect_error);
     } 
     echo "Connected successfully (".$db->host_info.")";
-
+    */
 ?>
